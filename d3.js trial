@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Data Visualization Dashboard with D3.js</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+        .chart-container {
+            width: 80%;
+            margin: 2rem auto;
+        }
+        svg {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Electric Vehicle Data Dashboard</h1>
+</header>
+
+<main>
+    <div class="chart-container">
+        <h2>EV Sales Over Time</h2>
+        <svg id="evSalesChart" width="800" height="400"></svg>
+    </div>
+
+    <div class="chart-container">
+        <h2>CO2 Emissions Reduction</h2>
+        <svg id="emissionsChart" width="800" height="400"></svg>
+    </div>
+
+    <div class="chart-container">
+        <h2>Charging Stations Growth</h2>
+        <svg id="chargingChart" width="800" height="400"></svg>
+    </div>
+</main>
+
+<script>
+    // Data
+    const evSalesData = [
+        { year: 2015, sales: 100000 },
+        { year: 2016, sales: 200000 },
+        { year: 2017, sales: 400000 },
+        { year: 2018, sales: 800000 },
+        { year: 2019, sales: 1200000 },
+        { year: 2020, sales: 1800000 },
+        { year: 2021, sales: 2600000 },
+        { year: 2022, sales: 3500000 }
+    ];
+
+    const emissionsData = [
+        { year: 2015, emissions: 100 },
+        { year: 2016, emissions: 90 },
+        { year: 2017, emissions: 85 },
+        { year: 2018, emissions: 75 },
+        { year: 2019, emissions: 65 },
+        { year: 2020, emissions: 55 },
+        { year: 2021, emissions: 45 },
+        { year: 2022, emissions: 30 }
+    ];
+
+    const chargingData = [
+        { year: 2015, stations: 5000 },
+        { year: 2016, stations: 10000 },
+        { year: 2017, stations: 15000 },
+        { year: 2018, stations: 25000 },
+        { year: 2019, stations: 40000 },
+        { year: 2020, stations: 60000 },
+        { year: 2021, stations: 90000 },
+        { year: 2022, stations: 120000 }
+    ];
+
+    // Line Chart for EV Sales
+    createLineChart(evSalesData, 'sales', '#evSalesChart', 'EV Sales');
+
+    // Bar Chart for CO2 Emissions
+    createBarChart(emissionsData, 'emissions', '#emissionsChart', 'CO2 Emissions');
+
+    // Line Chart for Charging Stations
+    createLineChart(chargingData, 'stations', '#chargingChart', 'Charging Stations');
+
+    function createLineChart(data, yKey, container, yAxisLabel) {
+        const svg = d3.select(container),
+              margin = { top: 20, right: 30, bottom: 40, left: 50 },
+              width = +svg.attr('width') - margin.left - margin.right,
+              height = +svg.attr('height') - margin.top - margin.bottom;
+
+        const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scaleLinear().domain(d3.extent(data, d => d.year)).range([0, width]);
+        const y = d3.scaleLinear().domain([0, d3.max(data, d => d[yKey])]).range([height, 0]);
+
+        const line = d3.line()
+            .x(d => x(d.year))
+            .y(d => y(d[yKey]));
+
+        g.append('g')
+            .attr('class', 'axis axis--x')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x).tickFormat(d3.format('d')));
+
+        g.append('g')
+            .attr('class', 'axis axis--y')
+            .call(d3.axisLeft(y));
+
+        g.append('path')
+            .datum(data)
+            .attr('class', 'line')
+            .attr('fill', 'none')
+            .attr('stroke', 'steelblue')
+            .attr('stroke-width', 1.5)
+            .attr('d', line);
+    }
+
+    function createBarChart(data, yKey, container, yAxisLabel) {
+        const svg = d3.select(container),
+              margin = { top: 20, right: 30, bottom: 40, left: 50 },
+              width = +svg.attr('width') - margin.left - margin.right,
+              height = +svg.attr('height') - margin.top - margin.bottom;
+
+        const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+        const x = d3.scaleBand().domain(data.map(d => d.year)).range([0, width]).padding(0.1);
+        const y = d3.scaleLinear().domain([0, d3.max(data, d => d[yKey])]).range([height, 0]);
+
+        g.append('g')
+            .attr('class', 'axis axis--x')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x));
+
+        g.append('g')
+            .attr('class', 'axis axis--y')
+            .call(d3.axisLeft(y));
+
+        g.selectAll('.bar')
+            .data(data)
+            .enter().append('rect')
+            .attr('class', 'bar')
+            .attr('x', d => x(d.year))
+            .attr('y', d => y(d[yKey]))
+            .attr('width', x.bandwidth())
+            .attr('height', d => height - y(d[yKey]))
+            .attr('fill', 'orange');
+    }
+</script>
+
+</body>
+</html>
