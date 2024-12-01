@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Data Visualization Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> <!-- For Plotly charts -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #0044cc;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            padding: 2rem;
+        }
+        .chart-container {
+            width: 80%;
+            margin: 2rem auto;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #0044cc;
+            color: white;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Electric Vehicle Data Dashboard</h1>
+    <p>Visualizing EV Sales, Emissions Reductions, and Charging Infrastructure</p>
+</header>
+
+<main>
+    <div class="chart-container">
+        <h2>EV Sales Over Time</h2>
+        <div id="evSalesChart"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2>CO2 Emissions Reduction</h2>
+        <div id="emissionsChart"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2>Charging Stations Growth</h2>
+        <div id="chargingChart"></div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 EV Data Visualization Project. All rights reserved.</p>
+</footer>
+
+<script>
+    // Example data for the charts
+    var evSalesData = {
+        x: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+        y: [100000, 200000, 400000, 800000, 1200000, 1800000, 2600000, 3500000],
+        type: 'scatter'
+    };
+
+    var emissionsData = {
+        x: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+        y: [100, 90, 85, 75, 65, 55, 45, 30],
+        type: 'bar'
+    };
+
+    var chargingData = {
+        x: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+        y: [5000, 10000, 15000, 25000, 40000, 60000, 90000, 120000],
+        type: 'line'
+    };
+
+    // Plot the charts
+    Plotly.newPlot('evSalesChart', [evSalesData], { title: 'EV Sales Over Time' });
+    Plotly.newPlot('emissionsChart', [emissionsData], { title: 'CO2 Emissions Reduction' });
+    Plotly.newPlot('chargingChart', [chargingData], { title: 'Charging Stations Growth' });
+</script>
+
+</body>
+</html>
