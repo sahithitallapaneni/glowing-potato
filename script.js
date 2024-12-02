@@ -1,151 +1,124 @@
-d3.csv("locations.csv").then(function(data) {
-    // Process data
-    data.forEach(function(d) {
-        d.Latitude = +d.Latitude;
-        d.Longitude = +d.Longitude;
-        d.State = d.State.trim();
-        d.AccessDaysTime = d.AccessDaysTime.trim();
+// Load the dataset (ensure the CSV is in the same directory or link to URL)
+d3.csv("Alternative Fuel Vehicles US.csv").then(function(data) {
+
+    // Convert data types as needed
+    data.forEach(d => {
+        d['Alternative Fuel Economy City'] = +d['Alternative Fuel Economy City'];
+        d['Alternative Fuel Economy Highway'] = +d['Alternative Fuel Economy Highway'];
+        d['All-Electric Range'] = +d['All-Electric Range'];
+        d['PHEV Total Range'] = +d['PHEV Total Range'];
     });
 
-    // Get unique states for the dropdown
-    const states = [...new Set(data.map(d => d.State))];
-    
-    const stateFilter = d3.select("#stateFilter");
-    states.forEach(state => {
-        stateFilter.append("option").text(state).attr("value", state);
-    });
+    // Bar Chart for Fuel Economy Comparison (City vs Highway)
+    const margin = {top: 20, right: 30, bottom: 40, left: 40};
+    const width = 800 - margin.left - margin.right;
+    const height = 400 - margin.top - margin.bottom;
 
-    // Initialize the map
-    const map = L.map('map').setView([37.8, -96], 4);  // Center to USA
-    
-    // Add tile layer to the map
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    const svg = d3.select("#fuel-comparison-chart")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // Create a function to add markers
-    function updateMap(data) {
-        // Clear previous markers
-        map.eachLayer(function(layer) {
-            if (layer instanceof L.Marker) {
-                map.removeLayer(layer);
-            }
-        });
+    const x0 = d3.scaleBand()
+        .domain(data.map(d => d['Manufacturer']))
+        .rangeRound([0, width])
+        .padding(0.1);
 
-        // Add new markers
-        data.forEach(function(d) {
-            L.marker([d.Latitude, d.Longitude])
-                .addTo(map)
-                .bindPopup(`<strong>${d.StationName}</strong><br>${d.StreetAddress}<br>${d.City}, ${d.State}`);
-        });
-    }
-    
-    // Add markers based on all stations initially
-    updateMap(data);
-    
-    // Create bar chart
-    function createBarChart(data) {
-        const stateCount = d3.nest()
-            .key(d => d.State)
-            .rollup(v => v.length)
-            .entries(data);
+    const x1 = d3.scaleBand()
+        .domain(['City', 'Highway'])
+        .rangeRound([0, x0.bandwidth()])
+        .padding(0.05);
 
-        const margin = { top: 20, right: 20, bottom: 40, left: 40 };
-        const width = 800 - margin.left - margin.right;
-        const height = 400 - margin.top - margin.bottom;
-        
-        const svg = d3.select("#bar-chart")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => Math.max(d['Alternative Fuel Economy City'], d['Alternative Fuel Economy Highway']))])
+        .nice()
+        .rangeRound([height, 0]);
 
-        const x = d3.scaleBand()
-            .domain(stateCount.map(d => d.key))
-            .range([0, width])
-            .padding(0.1);
+    svg.append("g")
+        .selectAll("g")
+        .data(data)
+        .enter().append("g")
+        .attr("transform", d => "translate(" + x0(d['Manufacturer']) + ",0)")
+      .selectAll("rect")
+        .data(d => [{category: 'City', value: d['Alternative Fuel Economy City']}, {category: 'Highway', value: d['Alternative Fuel Economy Highway']}])
+        .enter().append("rect")
+        .attr("x", d => x1(d.category))
+        .attr("y", d => y(d.value))
+        .attr("width", x1.bandwidth())
+        .attr("height", d => height - y(d.value))
+        .attr("class", "bar");
 
-        const y = d3.scaleLinear()
-            .domain([0, d3.max(stateCount, d => d.value)])
-            .nice()
-            .range([height, 0]);
+    svg.append("g")
+        .selectAll(".axis")
+        .data([y])
+        .enter().append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(y));
 
-        svg.selectAll(".bar")
-            .data(stateCount)
-            .enter().append("rect")
-            .attr("class", "bar")
-            .attr("x", d => x(d.key))
-            .attr("y", d => y(d.value))
-            .attr("width", x.bandwidth())
-            .attr("height", d => height - y(d.value));
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x0));
 
-        svg.append("g")
-            .attr("class", "x-axis")
-            .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x));
+    // Scatter Plot for All-Electric Range vs Hybrid Range
+    const scatterSvg = d3.select("#electric-vs-hybrid")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
 
-        svg.append("g")
-            .attr("class", "y-axis")
-            .call(d3.axisLeft(y));
-    }
-    
-    createBarChart(data);
+    const xScale = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d['All-Electric Range'])])
+        .range([0, width]);
 
-    // Create time of access visualization (pie chart or simple bar)
-    function createAccessTimeChart(data) {
-        const accessCount = d3.nest()
-            .key(d => d.AccessDaysTime)
-            .rollup(v => v.length)
-            .entries(data);
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d['PHEV Total Range'])])
+        .range([height, 0]);
 
-        const margin = { top: 20, right: 20, bottom: 40, left: 40 };
-        const width = 600 - margin.left - margin.right;
-        const height = 300 - margin.top - margin.bottom;
+    scatterSvg.selectAll("circle")
+        .data(data)
+        .enter().append("circle")
+        .attr("cx", d => xScale(d['All-Electric Range']))
+        .attr("cy", d => yScale(d['PHEV Total Range']))
+        .attr("r", 5)
+        .attr("fill", "steelblue");
 
-        const svg = d3.select("#time-chart")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
+    scatterSvg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xScale));
 
-        const x = d3.scaleBand()
-            .domain(accessCount.map(d => d.key))
-            .range([0, width])
-            .padding(0.1);
+    scatterSvg.append("g")
+        .call(d3.axisLeft(yScale));
 
-        const y = d3.scaleLinear()
-            .domain([0, d3.max(accessCount, d => d.value)])
-            .nice()
-            .range([height, 0]);
+    // Pie Chart for Vehicle Categories Distribution
+    const categoryCounts = d3.nest()
+        .key(d => d['Category'])
+        .rollup(v => v.length)
+        .entries(data);
 
-        svg.selectAll(".bar")
-            .data(accessCount)
-            .enter().append("rect")
-            .attr("class", "bar")
-            .attr("x", d => x(d.key))
-            .attr("y", d => y(d.value))
-            .attr("width", x.bandwidth())
-            .attr("height", d => height - y(d.value));
+    const pie = d3.pie()
+        .value(d => d.value);
 
-        svg.append("g")
-            .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x));
+    const arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(Math.min(width, height) / 2);
 
-        svg.append("g")
-            .call(d3.axisLeft(y));
-    }
-    
-    createAccessTimeChart(data);
+    const pieSvg = d3.select("#vehicle-category-pie")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+      .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    // Filter data when a state is selected
-    stateFilter.on("change", function() {
-        const selectedState = this.value;
-        const filteredData = selectedState === "all" ? data : data.filter(d => d.State === selectedState);
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-        updateMap(filteredData);
-        createBarChart(filteredData);
-        createAccessTimeChart(filteredData);
-    });
+    pieSvg.selectAll("path")
+        .data(pie(categoryCounts))
+        .enter().append("path")
+        .attr("d", arc)
+        .attr("fill", d => color(d.data.key));
+
+    pieSvg.append("g")
+        .attr("class", "legend")
+        .attr("transform", "translate(" + (width / 2) + "," + (height / 2 + 20) + ")");
 });
