@@ -3,28 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EV Data Visualization</title>
+    <title>EV Charging Stations Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://d3js.org/d3.v6.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        .bar {
-            fill: steelblue;
-        }
-        .axis-label {
-            font-size: 12px;
-        }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
 </head>
 <body>
-    <h1>EV Data Visualization</h1>
+    <h1>EV Charging Stations Dashboard</h1>
+    
+    <!-- Dropdown Filter -->
+    <label for="stateFilter">Select State:</label>
+    <select id="stateFilter">
+        <option value="all">All States</option>
+        <!-- States will be populated dynamically -->
+    </select>
+
+    <!-- Map for Charging Stations -->
+    <div id="map" style="height: 400px;"></div>
+    
+    <!-- Bar Chart for Number of Stations by State -->
     <div id="bar-chart"></div>
-    <div id="line-chart"></div>
-    <script src="script.js"></script> <!-- Your D3.js script -->
+
+    <!-- Time of Access Visualization -->
+    <div id="time-chart"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>
