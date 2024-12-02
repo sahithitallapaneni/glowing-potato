@@ -3,29 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EV Charging Stations Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>EV Dataset Visualizations</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .chart { margin: 20px; }
+        .axis path, .axis line { fill: none; shape-rendering: crispEdges; }
+        .bar { fill: steelblue; }
+        .bar:hover { fill: orange; }
+    </style>
 </head>
 <body>
-    <h1>EV Charging Stations Dashboard</h1>
-    
-    <!-- Dropdown Filter -->
-    <label for="stateFilter">Select State:</label>
-    <select id="stateFilter">
-        <option value="all">All States</option>
-        <!-- States will be populated dynamically -->
-    </select>
+    <h1>Electric Vehicle Data Visualizations</h1>
 
-    <!-- Map for Charging Stations -->
-    <div id="map" style="height: 400px;"></div>
-    
-    <!-- Bar Chart for Number of Stations by State -->
-    <div id="bar-chart"></div>
-
-    <!-- Time of Access Visualization -->
-    <div id="time-chart"></div>
+    <div id="fuel-comparison-chart"></div>
+    <div id="electric-vs-hybrid"></div>
+    <div id="vehicle-category-pie"></div>
 
     <script src="script.js"></script>
 </body>
