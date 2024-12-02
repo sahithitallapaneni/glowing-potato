@@ -5,11 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EV Data Visualization</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
-    <link rel="stylesheet" href="styles.css"> <!-- Optional CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .bar {
+            fill: steelblue;
+        }
+        .axis-label {
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
-    <h1>EV Sales by Year and Region</h1>
-    <div id="visualization"></div>
-    <script src="script.js"></script> <!-- D3.js script -->
+    <h1>EV Data Visualization</h1>
+    <div id="bar-chart"></div>
+    <div id="line-chart"></div>
+    <script src="script.js"></script> <!-- Your D3.js script -->
 </body>
 </html>
