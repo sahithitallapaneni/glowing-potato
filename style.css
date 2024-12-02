@@ -10,4 +10,9 @@ h1 {
 #tooltip {
     font-size: 14px;
     pointer-events: none;
+    position: absolute;
+    background-color: lightgray;
+    padding: 5px;
+    border-radius: 5px;
+    opacity: 0;
 }
