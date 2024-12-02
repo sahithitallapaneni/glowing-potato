@@ -1,12 +1,20 @@
-// Load CSV data
+// Load the CSV data
 d3.csv("IEA Global EV Data 2024.csv").then(function(data) {
-    console.log(data); // Check if the data is loaded correctly
 
-    // Convert necessary columns to numbers
+    // Process data: Convert year to number and value to number
     data.forEach(function(d) {
-        d.Year = +d.Year;
-        d.EV_Sales = +d.EV_Sales; // Assuming "EV_Sales" is the column for sales data
+        d.year = +d.year;
+        d.value = +d.value;
     });
+
+    // Group data by region and year
+    const nestedData = d3.nest()
+        .key(d => d.region)
+        .key(d => d.year)
+        .rollup(function(leaves) {
+            return d3.sum(leaves, d => d.value);
+        })
+        .entries(data);
 
     // Set up chart dimensions
     const margin = { top: 20, right: 30, bottom: 40, left: 40 };
@@ -23,28 +31,41 @@ d3.csv("IEA Global EV Data 2024.csv").then(function(data) {
 
     // Set up scales
     const x = d3.scaleBand()
-                .domain(data.map(d => d.Year))
                 .range([0, width])
                 .padding(0.1);
 
     const y = d3.scaleLinear()
-                .domain([0, d3.max(data, d => d.EV_Sales)])
-                .nice()
                 .range([height, 0]);
+
+    // Flatten nested data into a list of bars
+    const flattenedData = [];
+    nestedData.forEach(function(regionData) {
+        regionData.values.forEach(function(yearData) {
+            flattenedData.push({
+                region: regionData.key,
+                year: yearData.key,
+                value: yearData.value
+            });
+        });
+    });
+
+    // Set domain for scales based on the data
+    x.domain(flattenedData.map(d => d.year));
+    y.domain([0, d3.max(flattenedData, d => d.value)]);
 
     // Add X axis
     svg.append("g")
        .selectAll(".tick")
-       .data(data)
+       .data(flattenedData)
        .enter()
        .append("text")
        .attr("class", "x-axis")
        .attr("transform", function(d) {
-           return "translate(" + x(d.Year) + ",0)";
+           return "translate(" + x(d.year) + ",0)";
        })
        .attr("y", height)
        .attr("dx", "-0.5em")
-       .text(d => d.Year)
+       .text(d => d.year)
        .style("font-size", "12px");
 
     // Add Y axis
@@ -53,15 +74,20 @@ d3.csv("IEA Global EV Data 2024.csv").then(function(data) {
 
     // Create bars for the chart
     svg.selectAll(".bar")
-       .data(data)
+       .data(flattenedData)
        .enter()
        .append("rect")
        .attr("class", "bar")
-       .attr("x", d => x(d.Year))
-       .attr("y", d => y(d.EV_Sales))
+       .attr("x", d => x(d.year))
+       .attr("y", d => y(d.value))
        .attr("width", x.bandwidth())
-       .attr("height", d => height - y(d.EV_Sales))
-       .style("fill", "steelblue");
+       .attr("height", d => height - y(d.value))
+       .style("fill", d => {
+           // Color bars based on region
+           if (d.region === 'Europe') return 'blue';
+           else if (d.region === 'USA') return 'green';
+           return 'gray';
+       });
 
     // Add tooltips on hover
     svg.selectAll(".bar")
@@ -71,12 +97,17 @@ d3.csv("IEA Global EV Data 2024.csv").then(function(data) {
              .style("left", event.pageX + "px")
              .style("top", event.pageY - 28 + "px")
              .style("opacity", 1)
-             .html(`Year: ${d.Year}<br>EV Sales: ${d.EV_Sales}`);
+             .html(`Year: ${d.year}<br>Region: ${d.region}<br>EV Sales: ${d.value}`);
        })
        .on("mouseout", function() {
-           d3.select(this).style("fill", "steelblue");
+           d3.select(this).style("fill", function(d) {
+               if (d.region === 'Europe') return 'blue';
+               else if (d.region === 'USA') return 'green';
+               return 'gray';
+           });
            d3.select("#tooltip").style("opacity", 0);
        });
+
 });
 
 // Tooltip div
