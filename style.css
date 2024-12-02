@@ -7,12 +7,18 @@ h1 {
     text-align: center;
 }
 
-#tooltip {
-    font-size: 14px;
-    pointer-events: none;
-    position: absolute;
-    background-color: lightgray;
-    padding: 5px;
-    border-radius: 5px;
-    opacity: 0;
+#map {
+    margin-bottom: 20px;
+}
+
+#bar-chart, #time-chart {
+    margin-top: 30px;
+}
+
+.bar {
+    fill: steelblue;
+}
+
+.axis-label {
+    font-size: 12px;
 }
