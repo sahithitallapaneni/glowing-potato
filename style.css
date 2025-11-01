@@ -46,3 +46,17 @@ footer { text-align:center; padding:2rem; opacity:0.7; margin-top:3rem; }
   .hero-visual { flex:1; display:flex; align-items:center; justify-content:center; }
   .projects-grid { grid-template-columns:repeat(2,1fr); }
 }
+/* Neon Glow Effects */
+.glow-text {
+  color: #00F5C4;
+  text-shadow: 0 0 5px #00F5C4, 0 0 10px #7C3AED, 0 0 20px #FF4D6D;
+  transition: all 0.3s ease-in-out;
+}
+.glow-text:hover {
+  text-shadow: 0 0 10px #00F5C4, 0 0 20px #7C3AED, 0 0 40px #FF4D6D;
+  transform: scale(1.05);
+}
+
+.project-card:hover {
+  box-shadow: 0 0 15px #00F5C4, 0 0 30px #7C3AED;
+}
