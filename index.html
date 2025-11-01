@@ -1,92 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sahithi Tallapaneni | Portfolio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahithi Tallapaneni | Portfolio</title>
+
+<style>
+/* === Global Styles === */
+body {margin:0; font-family:Arial,sans-serif; background:#0B1020; color:#EAEAEA;}
+a {text-decoration:none; color:inherit;}
+h1,h2,h3 {font-family:'Orbitron',sans-serif;}
+
+/* === Header === */
+header {display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#0B1020;}
+nav a {margin:0 10px; color:#EAEAEA; transition:0.3s;}
+nav a:hover {color:#00F5C4; text-shadow:0 0 10px #00F5C4,0 0 20px #7C3AED;}
+
+/* === Hero Section === */
+.hero {display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:5rem 2rem; position:relative; overflow:hidden;}
+.hero h2 {font-size:3rem; color:#00F5C4; text-shadow:0 0 10px #00F5C4,0 0 20px #7C3AED;}
+.hero p {font-size:1.2rem; color:#FF4D6D; margin-top:0.5rem;}
+.hero a {margin:0 1rem; padding:0.6rem 1.5rem; border-radius:8px; font-weight:bold; display:inline-block; transition:0.3s; position:relative; overflow:hidden;}
+.hero a:hover {transform:scale(1.05);}
+.hero .btn-primary {background:#00F5C4; color:#0B1020;}
+.hero .btn-secondary {border:2px solid #7C3AED; color:#7C3AED;}
+
+/* Neon Buttons Gradient Hover */
+.hero a.btn-primary::after {
+  content:""; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background:linear-gradient(120deg,#00F5C4,#7C3AED,#FF4D6D); z-index:0; transition:0.5s;
+}
+.hero a.btn-primary span {position:relative; z-index:1;}
+.hero a.btn-primary:hover::after {left:0;}
+
+/* === Section Styles === */
+section {padding:4rem 2rem; max-width:1000px; margin:auto;}
+#projects {background:#11142A;}
+#contact {background:#11142A; text-align:center;}
+
+/* === Project Cards === */
+.projects-grid {display:flex; flex-wrap:wrap; gap:2rem; justify-content:center; margin-top:2rem;}
+.project-card {background:rgba(255,255,255,0.05); padding:1.5rem; border-radius:12px; width:300px; transition:transform 0.3s, box-shadow 0.3s;}
+.project-card:hover {transform:scale(1.03); box-shadow:0 0 15px #00F5C4,0 0 30px #7C3AED;}
+
+/* === Contact Form === */
+.contact-form {display:flex; flex-direction:column; gap:1rem; margin-top:2rem; max-width:400px; margin-left:auto; margin-right:auto;}
+.contact-form input, .contact-form textarea {padding:0.5rem; border-radius:6px; border:none; background:rgba(255,255,255,0.05); color:#EAEAEA; transition:0.3s;}
+.contact-form input:focus, .contact-form textarea:focus {outline:2px solid #00F5C4;}
+
+/* === Neon Cursor Trail === */
+.trail {position:absolute; width:6px; height:6px; border-radius:50%; background:#00F5C4; pointer-events:none; box-shadow:0 0 8px #00F5C4,0 0 15px #7C3AED; animation:fade 0.5s forwards;}
+@keyframes fade {to {opacity:0; transform:scale(0.5);}}
+
+/* === Canvas Dots === */
+#heroCanvas {position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1;}
+</style>
 </head>
-<body style="margin:0; font-family:Arial, sans-serif; background:#0B1020; color:#EAEAEA;">
 
-  <!-- Header / Nav -->
-  <header style="display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#0B1020;">
-    <h1 style="font-family:'Orbitron', sans-serif; font-size:1.8rem; color:#00F5C4;">Sahithi<span style="color:#FF4D6D;">.</span></h1>
-    <nav>
-      <a href="#about" style="margin:0 10px; color:#EAEAEA;">About</a>
-      <a href="#projects" style="margin:0 10px; color:#EAEAEA;">Projects</a>
-      <a href="#skills" style="margin:0 10px; color:#EAEAEA;">Skills</a>
-      <a href="#contact" style="margin:0 10px; color:#EAEAEA;">Contact</a>
-    </nav>
-  </header>
+<body>
 
-  <!-- Hero Section -->
-  <section style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:5rem 2rem; background:#0B1020;">
-    <h2 style="font-size:3rem; font-family:'Orbitron', sans-serif; color:#00F5C4; text-shadow:0 0 10px #00F5C4,0 0 20px #7C3AED;">Sahithi Tallapaneni</h2>
-    <p style="font-size:1.2rem; color:#FF4D6D; margin-top:0.5rem;">Software Engineer • Creative Web Developer</p>
-    <div style="margin-top:2rem;">
-      <a href="#projects" style="margin:0 1rem; padding:0.6rem 1.5rem; background:#00F5C4; color:#0B1020; border-radius:8px; font-weight:bold;">Projects</a>
-      <a href="#contact" style="margin:0 1rem; padding:0.6rem 1.5rem; border:2px solid #7C3AED; color:#7C3AED; border-radius:8px; font-weight:bold;">Contact</a>
+<!-- Header -->
+<header>
+  <h1 style="color:#00F5C4;">Sahithi<span style="color:#FF4D6D;">.</span></h1>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<!-- Hero Section -->
+<section class="hero">
+  <canvas id="heroCanvas"></canvas>
+  <h2>Sahithi Tallapaneni</h2>
+  <p>Software Engineer • Creative Web Developer</p>
+  <div style="margin-top:2rem;">
+    <a href="#projects" class="btn-primary"><span>Projects</span></a>
+    <a href="#contact" class="btn-secondary">Contact</a>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <h2 style="color:#7C3AED;">About Me</h2>
+  <p>Creative and detail-oriented Computer Science graduate student with strong background in web development and management. Dedicated to collaborative environments.</p>
+  <h3 style="color:#00F5C4;">Education</h3>
+  <ul>
+    <li>MS Computer Science — University of North Texas (Expected Dec 2025, GPA 4.0)</li>
+  </ul>
+</section>
+
+<!-- Projects -->
+<section id="projects">
+  <h2 style="color:#FF4D6D;">Projects</h2>
+  <div class="projects-grid">
+    <div class="project-card">
+      <h3 style="color:#00F5C4;">Bridge the Gap</h3>
+      <p>Civic-reporting platform connecting citizens with government departments. Full-stack design and analytics visualizations.</p>
+      <p style="color:#FF4D6D;">Flask • D3.js • Python</p>
     </div>
-  </section>
-
-  <!-- About Section -->
-  <section id="about" style="padding:4rem 2rem; max-width:900px; margin:auto;">
-    <h2 style="color:#7C3AED; font-family:'Orbitron', sans-serif;">About Me</h2>
-    <p style="margin-top:1rem; line-height:1.6;">Creative and detail-oriented Computer Science graduate student with strong background in web development and management. Dedicated to collaborative environments.</p>
-    <h3 style="margin-top:2rem; color:#00F5C4;">Education</h3>
-    <ul style="margin-left:20px; margin-top:0.5rem;">
-      <li>MS Computer Science — University of North Texas (Expected Dec 2025, GPA 4.0)</li>
-    </ul>
-  </section>
-
-  <!-- Projects Section -->
-  <section id="projects" style="padding:4rem 2rem; background:#11142A;">
-    <h2 style="color:#FF4D6D; font-family:'Orbitron', sans-serif;">Projects</h2>
-    <div style="display:flex; flex-wrap:wrap; gap:2rem; margin-top:2rem; justify-content:center;">
-      <div style="background:rgba(255,255,255,0.05); padding:1.5rem; border-radius:12px; width:300px; transition:transform 0.3s;">
-        <h3 style="color:#00F5C4;">Bridge the Gap</h3>
-        <p>Civic-reporting platform connecting citizens with government departments. Full-stack design and analytics visualizations.</p>
-        <p style="color:#FF4D6D;">Flask • D3.js • Python</p>
-      </div>
-      <div style="background:rgba(255,255,255,0.05); padding:1.5rem; border-radius:12px; width:300px; transition:transform 0.3s;">
-        <h3 style="color:#00F5C4;">EV Environmental Impact Dashboard</h3>
-        <p>Interactive data visualization dashboard showing EV adoption and emissions impact. 150+ users.</p>
-        <p style="color:#FF4D6D;">Power BI • JS • Excel</p>
-      </div>
-      <div style="background:rgba(255,255,255,0.05); padding:1.5rem; border-radius:12px; width:300px; transition:transform 0.3s;">
-        <h3 style="color:#00F5C4;">Credit Card Fraud Detection</h3>
-        <p>ML pipeline using logistic regression to flag suspicious transactions, with REST endpoints for prediction.</p>
-        <p style="color:#FF4D6D;">Python • SQL • REST API</p>
-      </div>
-      <div style="background:rgba(255,255,255,0.05); padding:1.5rem; border-radius:12px; width:300px; transition:transform 0.3s;">
-        <h3 style="color:#00F5C4;">Smart Parking Application</h3>
-        <p>Real-time parking slot tracking system using IoT sensors, React/Node.js, live dashboards, deployed on AWS EC2.</p>
-        <p style="color:#FF4D6D;">React • Node.js • MySQL • IoT</p>
-      </div>
+    <div class="project-card">
+      <h3 style="color:#00F5C4;">EV Environmental Impact Dashboard</h3>
+      <p>Interactive data visualization dashboard showing EV adoption and emissions impact. 150+ users.</p>
+      <p style="color:#FF4D6D;">Power BI • JS • Excel</p>
     </div>
-  </section>
+    <div class="project-card">
+      <h3 style="color:#00F5C4;">Credit Card Fraud Detection</h3>
+      <p>ML pipeline using logistic regression to flag suspicious transactions, with REST endpoints for prediction.</p>
+      <p style="color:#FF4D6D;">Python • SQL • REST API</p>
+    </div>
+    <div class="project-card">
+      <h3 style="color:#00F5C4;">Smart Parking Application</h3>
+      <p>Real-time parking slot tracking system using IoT sensors, React/Node.js, live dashboards, deployed on AWS EC2.</p>
+      <p style="color:#FF4D6D;">React • Node.js • MySQL • IoT</p>
+    </div>
+  </div>
+</section>
 
-  <!-- Skills Section -->
-  <section id="skills" style="padding:4rem 2rem; max-width:900px; margin:auto;">
-    <h2 style="color:#7C3AED; font-family:'Orbitron', sans-serif;">Skills</h2>
-    <p style="margin-top:1rem;">Python • Java • C# • SQL • HTML • CSS • JavaScript • React • Node.js • Flask • Docker • Git • AWS • MySQL • MongoDB • Power BI • Tableau</p>
-  </section>
+<!-- Skills -->
+<section id="skills">
+  <h2 style="color:#7C3AED;">Skills</h2>
+  <p>Python • Java • C# • SQL • HTML • CSS • JavaScript • React • Node.js • Flask • Docker • Git • AWS • MySQL • MongoDB • Power BI • Tableau</p>
+</section>
 
-  <!-- Contact Section -->
-  <section id="contact" style="padding:4rem 2rem; background:#11142A; text-align:center;">
-    <h2 style="color:#FF4D6D; font-family:'Orbitron', sans-serif;">Contact Me</h2>
-    <p style="margin-top:1rem;">Email: <strong>tallapanenisahithi@gmail.com</strong> | Phone: <strong>361-228-6938</strong></p>
-    <form action="mailto:tallapanenisahithi@gmail.com" method="post" enctype="text/plain" style="margin-top:2rem; display:flex; flex-direction:column; gap:1rem; max-width:400px; margin-left:auto; margin-right:auto;">
-      <input type="text" name="name" placeholder="Name" required style="padding:0.5rem; border-radius:6px; border:none; background:rgba(255,255,255,0.05); color:#EAEAEA;">
-      <input type="email" name="email" placeholder="Email" required style="padding:0.5rem; border-radius:6px; border:none; background:rgba(255,255,255,0.05); color:#EAEAEA;">
-      <textarea name="message" placeholder="Message" rows="5" required style="padding:0.5rem; border-radius:6px; border:none; background:rgba(255,255,255,0.05); color:#EAEAEA;"></textarea>
-      <button type="submit" style="padding:0.6rem 1.5rem; background:#00F5C4; color:#0B1020; border:none; border-radius:8px; font-weight:bold;">Send Message</button>
-    </form>
-  </section>
+<!-- Contact -->
+<section id="contact">
+  <h2 style="color:#FF4D6D;">Contact Me</h2>
+  <p>Email: <strong>tallapanenisahithi@gmail.com</strong> | Phone: <strong>361-228-6938</strong></p>
+  <form action="mailto:tallapanenisahithi@gmail.com" method="post" enctype="text/plain" class="contact-form">
+    <input type="text" name="name" placeholder="Name" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <textarea name="message" placeholder="Message" rows="5" required></textarea>
+    <button type="submit" class="btn-primary">Send Message</button>
+  </form>
+</section>
 
-  <!-- Footer -->
-  <footer style="text-align:center; padding:2rem; opacity:0.7;">
-    <p>Built with ❤️ • Sahithi Tallapaneni • 2025</p>
-  </footer>
+<!-- Footer -->
+<footer style="text-align:center; padding:2rem; opacity:0.7;">
+  <p>Built with ❤️ • Sahithi Tallapaneni • 2025</p>
+</footer>
+
+<!-- === Inline JS for Floating Dots & Cursor Trail === -->
+<script>
+/* Floating Neon Dots */
+const canvas = document.getElementById('heroCanvas');
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+const ctx = canvas.getContext('2d');
+const width = canvas.width;
+const height = canvas.height;
+const dots = [];
+for(let i=0;i<30;i++){
+  dots.push({x:Math.random()*width, y:Math.random()*height, r:Math.random()*3+1, dx:(Math.random()-0.5)*0.8, dy:(Math.random()-0.5)*0.8});
+}
+function animateDots(){
+  ctx.clearRect(0,0,width,height);
+  dots.forEach(dot=>{
+    dot.x += dot.dx; dot.y += dot.dy;
+    if(dot.x<0||dot.x>width) dot.dx*=-1;
+    if(dot.y<0||dot.y>height) dot.dy*=-1;
+    ctx.beginPath();
+    ctx.arc(dot.x,dot.y,dot.r,0,Math.PI*2);
+    ctx.fillStyle='rgba(0,245,196,0.8)';
+    ctx.shadowColor='#7C3AED';
+    ctx.shadowBlur=10;
+    ctx.fill();
+  });
+  requestAnimationFrame(animateDots);
+}
+animateDots();
+
+/* Neon Cursor Trail */
+document.body.addEventListener('mousemove',e=>{
+  const dot=document.createElement('div');
+  dot.className='trail';
+  dot.style.left=e.pageX+'px';
+  dot.style.top=e.pageY+'px';
+  document.body.appendChild(dot);
+  setTimeout(()=>dot.remove(),500);
+});
+</script>
 
 </body>
 </html>
