@@ -1,25 +1,172 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EV Dataset Visualizations</title>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .chart { margin: 20px; }
-        .axis path, .axis line { fill: none; shape-rendering: crispEdges; }
-        .bar { fill: steelblue; }
-        .bar:hover { fill: orange; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sahithi Tallapaneni — Web Developer</title>
+  <meta name="description" content="Sahithi Tallapaneni — Web Developer. Builds scalable, user-friendly web apps using React, Node.js, Python." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.png" />
 </head>
 <body>
-    <h1>Electric Vehicle Data Visualizations</h1>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1>Sahithi Tallapaneni</h1>
+        <p class="tag">Web Developer · React · Node.js · Python</p>
+      </div>
+      <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">☰</button>
+      <nav id="site-nav" class="site-nav">
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+        <a class="btn-cta" href="#contact">Hire Me</a>
+      </nav>
+    </div>
+  </header>
 
-    <div id="fuel-comparison-chart"></div>
-    <div id="electric-vs-hybrid"></div>
-    <div id="vehicle-category-pie"></div>
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <h2>Hi, I’m <span class="accent">Sahithi</span> — I build web experiences that matter.</h2>
+          <p class="lead">I turn ideas into scalable, user-friendly web apps. Fast learner, startup-ready, and obsessed with clean code & delightful UX.</p>
+          <div class="hero-ctas">
+            <a class="btn" href="#projects">See Projects</a>
+            <a class="btn ghost" href="https://github.com/your-username" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <img src="assets/hero-screenshot.png" alt="Project preview" />
+        </div>
+      </div>
+    </section>
 
-    <script src="script.js"></script>
+    <section id="projects" class="section projects">
+      <div class="container">
+        <h3>Selected Projects</h3>
+        <p class="muted">A few projects that showcase frontend, backend, and full-stack work.</p>
+        <div class="grid cards">
+          <!-- Project 1 -->
+          <article class="card">
+            <img src="assets/bridge-gap.png" alt="Bridge the Gap preview" class="card-img" />
+            <div class="card-body">
+              <h4>Bridge the Gap</h4>
+              <p class="card-meta">Flask · D3.js · REST API</p>
+              <p>Full-stack civic-reporting platform connecting citizens with government departments. Implemented REST APIs and data visualizations.</p>
+              <p class="card-links">
+                <a href="https://github.com/your-username/bridge-the-gap" target="_blank" rel="noopener">Code</a>
+                <a href="#" target="_blank" rel="noopener">Demo</a>
+              </p>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="card">
+            <img src="assets/ev-dashboard.png" alt="EV Dashboard" class="card-img" />
+            <div class="card-body">
+              <h4>EV Impact Dashboard</h4>
+              <p class="card-meta">Power BI · JS · Excel</p>
+              <p>Interactive data dashboard viewed by 150+ users. Coordinated analytics and UI to deliver timely visual insights.</p>
+              <p class="card-links">
+                <a href="https://github.com/your-username/ev-dashboard" target="_blank" rel="noopener">Code</a>
+                <a href="#" target="_blank" rel="noopener">Demo</a>
+              </p>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="card">
+            <img src="assets/fraud-detect.png" alt="Fraud detection" class="card-img" />
+            <div class="card-body">
+              <h4>Credit Card Fraud Detection</h4>
+              <p class="card-meta">Python · SQL · REST</p>
+              <p>Machine-learning pipeline for detecting fraudulent transactions with REST endpoints and DB alerts for suspicious activity.</p>
+              <p class="card-links">
+                <a href="https://github.com/your-username/fraud-detection" target="_blank" rel="noopener">Code</a>
+                <a href="#" target="_blank" rel="noopener">Demo</a>
+              </p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="section skills">
+      <div class="container">
+        <h3>Skills</h3>
+        <div class="skill-grid">
+          <div class="skill-col">
+            <h4>Languages & Frameworks</h4>
+            <ul class="skill-list">
+              <li>JavaScript (ES6+)</li>
+              <li>React · Node.js</li>
+              <li>Python · Flask</li>
+              <li>TypeScript (familiar)</li>
+            </ul>
+          </div>
+          <div class="skill-col">
+            <h4>Tools & Platforms</h4>
+            <ul class="skill-list">
+              <li>AWS (EC2, S3, Lambda)</li>
+              <li>MySQL · MongoDB</li>
+              <li>Git · Docker · VS Code</li>
+              <li>Power BI · D3.js</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="section experience">
+      <div class="container">
+        <h3>Experience</h3>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h4>Data Analyst Intern — 1stop.ai</h4>
+            <time>Sep 2021 – Nov 2021</time>
+            <p>Developed ML modules, built REST endpoints, and optimized code for production-ready ML tools.</p>
+          </div>
+          <div class="timeline-item">
+            <h4>Human Resource Manager — Make a Difference NGO</h4>
+            <time>May 2020 – Jul 2022</time>
+            <p>Built volunteer management dashboards, automated onboarding workflows, and drove volunteer engagement up 25%.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact">
+      <div class="container contact-inner">
+        <div class="contact-card">
+          <h3>Let’s build something amazing</h3>
+          <p>Email: <a href="mailto:tallapanenisahithi@gmail.com">tallapanenisahithi@gmail.com</a></p>
+          <p>LinkedIn: <a href="https://www.linkedin.com/in/sahithitallapaneni" target="_blank" rel="noopener">sahithitallapaneni</a></p>
+          <p>GitHub: <a href="https://github.com/your-username" target="_blank" rel="noopener">your-username</a></p>
+          <a class="btn" href="mailto:tallapanenisahithi@gmail.com">Email Me</a>
+        </div>
+
+        <form class="contact-form" action="#" onsubmit="return false;">
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="Your name" required />
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@domain.com" required />
+          <label for="message">Message</label>
+          <textarea id="message" rows="5" placeholder="Quick message..." required></textarea>
+          <button class="btn" type="submit">Send (demo)</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> Sahithi Tallapaneni — Built with ❤️ & code</small>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
